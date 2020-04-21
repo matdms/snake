@@ -24,10 +24,10 @@ for (i=0; i<nbre*nbre; i++) {
         e.target.style.backgroundColor='orange';
     });*/
 }
-let snake = [460];
+let snake = [460, 459, 458, 457, 456, 455];
 let apple = 260;
 let sens = 2;
-document.getElementById(snake[0]).style.backgroundColor='green';
+drawSnake();
 document.getElementById(apple).style.backgroundColor='red';
 let game = 0; //jeu stoppé
 
@@ -64,9 +64,10 @@ Sens:
 
 function moveSnake(sens) {
     //erase former snake
-    for (i=0; i<snake.length; i++) {
+    /*for (i=0; i<snake.length; i++) {
         document.getElementById(snake[i]).style.backgroundColor='aliceblue';
-    }
+    }*/
+    eraseSnake();
     
     //generate new snake
     let a = snake[0];   //copie de la tete du snake
@@ -103,14 +104,53 @@ function moveSnake(sens) {
     }
 
     //draw new snake
-    for (i=0; i<snake.length; i++) {
-        document.getElementById(snake[i]).style.backgroundColor='green';
+    drawSnake();
+    /*for (i=0; i<snake.length; i++) {
+        document.getElementById(snake[i]).style.backgroundColor='DarkSeaGreen';
+    }*/
+}
+
+function drawSnake() {
+    document.getElementById(snake[0]).style.backgroundColor='DarkSlateGray';
+    for (i=1; i<snake.length; i++) {
+        document.getElementById(snake[i]).style.backgroundColor='DarkSeaGreen';
     }
 }
 
+function eraseSnake() {
+    for (i=0; i<snake.length; i++) {
+        document.getElementById(snake[i]).style.backgroundColor='aliceblue';
+    }
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max))+1;
+}
+
 function startGame() {
-    sens = 4;
-    setInterval(function(){moveSnake(sens)}, 500);
+    setInterval(function(){
+        let dice = getRandomInt(3);
+        switch(dice) {
+            case 1:
+                if(sens == 1) {
+                    sens = 4;
+                } else {
+                    sens -= 1;
+                }
+                break;
+            case 2:
+                break;
+            case 3:
+                if(sens == 4) {
+                    sens = 1;
+                } else {
+                    sens += 1;
+                }
+                break;
+        }
+        console.log(sens);
+        moveSnake(sens);
+    }, 500);
 }
 
 
