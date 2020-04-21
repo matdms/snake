@@ -1,0 +1,42 @@
+/*ma feuille de style*/
+
+/* entrer ici le nb de cases par lignes (idem script.js) */
+:root {
+    --nb-cases : 30;
+}
+
+body {
+    font-family: sans-serif;
+    width: 640px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.btn {
+    margin: 0 0 10px 0; 
+}
+
+.snake {
+    display: flex;
+    flex-wrap: wrap;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/* il faut diviser 100% par le nb de case de chaque ligne */
+.case {
+    width: calc(100% / var(--nb-cases));
+    padding-top: calc(100% / var(--nb-cases));
+    box-sizing: border-box;
+    background-color: aliceblue;
+}
+
+a {
+    text-decoration: none;
+    color: teal;
+}
+
+a:hover {
+    font-weight: bolder;
+}
