@@ -27,9 +27,12 @@ for (i=0; i<nbre*nbre; i++) {
 let snake = [460, 459, 458, 457, 456, 455];
 let apple = 260;
 let sens = 2;
+let sensValid = 2; // to make sure direction is actually set in time interval
 drawSnake();
-document.getElementById(apple).style.backgroundColor='red';
+document.getElementById(apple).style.backgroundColor='OrangeRed';
 let game = 0; //jeu stoppé
+let speed = [500, 400, 300, 200, 100, 50]; //fonction du level
+let level = 2;
 
 
 //Reset grid
@@ -51,14 +54,6 @@ reset. addEventListener('click', function(e) {
 
 
 // the SNAKE
-
-/*
-Sens:
-            1
-        4   x   2
-            3
-*/
-
 
 //FUNCTIONS
 
@@ -108,10 +103,12 @@ function moveSnake(sens) {
     /*for (i=0; i<snake.length; i++) {
         document.getElementById(snake[i]).style.backgroundColor='DarkSeaGreen';
     }*/
+
+    sensValid = sens;
 }
 
 function drawSnake() {
-    document.getElementById(snake[0]).style.backgroundColor='DarkSlateGray';
+    document.getElementById(snake[0]).style.backgroundColor='OliveDrab';
     for (i=1; i<snake.length; i++) {
         document.getElementById(snake[i]).style.backgroundColor='DarkSeaGreen';
     }
@@ -129,7 +126,7 @@ function getRandomInt(max) {
 
 function startGame() {
     setInterval(function(){
-        let dice = getRandomInt(3);
+        /*let dice = getRandomInt(3);
         switch(dice) {
             case 1:
                 if(sens == 1) {
@@ -147,22 +144,51 @@ function startGame() {
                     sens += 1;
                 }
                 break;
-        }
-        console.log(sens);
+        }*/
+        //console.log(sens);
         moveSnake(sens);
-    }, 500);
+    }, speed[level]);
 }
 
 
 // EVENT LISTENERS
+/*
+arrow left	37
+arrow up	38
+arrow right	39
+arrow down	40
+space       32
+*/
+
+/*
+Sens:
+            1
+        4   x   2
+            3
+*/
+
 document.addEventListener('keydown', (event) => {
     let touche = event.keyCode;
     console.log(touche);
-    if(touche == 32) {
-        if(game == 0) {
-            game = 1;
-            startGame();
-        }
+    switch(touche) {
+        case 32:
+            if(game == 0) {
+                game = 1;
+                startGame();
+            }
+            break;
+        case 37:
+            if(sensValid != 2) {sens = 4};
+            break;
+        case 38:
+            if(sensValid != 3) {sens = 1};
+            break;
+        case 39:
+            if(sensValid != 4) {sens = 2};
+            break;
+        case 40:
+            if(sensValid != 1) {sens = 3};
+            break;
     }
 });
 
