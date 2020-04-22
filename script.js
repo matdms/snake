@@ -6,7 +6,10 @@
 
 // TODO
 /*
-    - le serpent se mord
+    - le setInterval ne s'interrompt pas à la fin de partie,
+    du coup au reset, la vitesse augmente !!!
+
+
 */
 
 // creation des cases dans le conteneur de classe "snake"
@@ -37,6 +40,7 @@ let score = 0;
 let longueur = 0;
 let finDePartie = "";
 let snakeBody = [];
+var t; //le timer pour la vitesse
 
 // RESET GAME
 function resetSnake() {
@@ -96,7 +100,11 @@ function moveSnake(sens, grow) {
             break;
         case 3:
             if( a > nbre*(nbre-1) ) {
-                snake.unshift(a%nbre);
+                if(a == nbre*nbre) {
+                    snake.unshift(nbre);
+                } else {
+                    snake.unshift(a%nbre);
+                }
             } else {
                 snake.unshift(a + nbre);
             }
@@ -118,6 +126,7 @@ function moveSnake(sens, grow) {
         //GAME OVER
         finDePartie = "-GAME OVER-   "
         game = 2;
+        clearTimeout(t);
     }
 
     // check if eats apple
@@ -186,11 +195,10 @@ function snakeGrow() {
 }
 
 function startGame() {
-    setInterval(function(){
+    t = setInterval(function(){
         moveSnake(sens,0);
     }, speed[level-1]);
 }
-
 
 // EVENT LISTENERS
 /*
