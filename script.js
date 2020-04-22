@@ -1,72 +1,68 @@
-//mon script
+// SNAKE - The Game
+// by matdms
+// April '20
 
+// TODO
+/*
+    - Créer une fonction drawApple
+    - Utilier getRandomInt pour la positionner
+    - le serpent se mord
+    - le serpent mord la pomme
+*/
 
-//creation des cases dans le conteneur de classe "sketch"
+//creation des cases dans le conteneur de classe "snake"
 //nombre de cases
 let nbre = 30;
 
 let grille = document.querySelector('.snake');
 let newDiv = document.createElement('div');
+let cases = [];
 
-//initialisation
-for (i=0; i<nbre*nbre; i++) {
+// INIT
+
+for (i=0; i<nbre*nbre; i++) {   // grid creation
     grille = document.querySelector('.snake');
     newDiv = document.createElement('div');
     newDiv.classList.add('case');
     newDiv.setAttribute('id', (i+1))
-    //newDiv.textContent = i+1;
     grille.append(newDiv);
-
-    //eventlistener pour chaque case créée
-    //on peut remplacer click par mouseover
-    /*newDiv.addEventListener('mouseover', function(e) {
-        //console.log(e.target.id);
-        e.target.style.backgroundColor='orange';
-    });*/
+    cases.push(i+1);
 }
-let snake = [460, 459, 458, 457, 456, 455];
-let apple = 260;
-let sens = 2;
-let sensValid = 2; // to make sure direction is actually set in time interval
+
+//console.log(cases);
+
+let snake = [460]; // [460, 459, 458, 457, 456, 455] // initial snake
+let apple = 260;    // 1st apple position
+let sens = 2;       // initial direction
+let sensValid = 2;  // trick to make sure direction is actually set in time interval
 drawSnake();
-document.getElementById(apple).style.backgroundColor='OrangeRed';
+drawApple();
+//document.getElementById(apple).style.backgroundColor='OrangeRed';   //
 let game = 0; //jeu stoppé
 let speed = [500, 400, 300, 200, 100, 50]; //fonction du level
-let level = 2;
+let level = 6;  // on utilise speed[level-1]
+let score = 0;
+let longueur = snake.length;
+updateScore();
 
 
-//Reset grid
-/*let reset = document.querySelector('.btn');
-reset. addEventListener('click', function(e) {
-    //alert('Reset grid');
-    for (i=0; i<nbre*nbre; i++) {
-        let monId = (i+1);
-        monDiv = document.getElementById(monId);
-        monDiv.style.backgroundColor='aliceblue';
-    }
-    snake = [460];
-    apple = 260;
-    sens = 2;
-    game = 0;
-    document.getElementById(snake[0]).style.backgroundColor='green';
-    document.getElementById(apple).style.backgroundColor='red';
-});*/
-
-
-// the SNAKE
 
 //FUNCTIONS
 
-function moveSnake(sens) {
+function updateScore() {
+    longueur = snake.length;
+    document.getElementById("score").textContent = "Level: " + level + " // Score: " + score + " // Size: " + longueur;
+}
+
+function moveSnake(sens, grow) {
     //erase former snake
-    /*for (i=0; i<snake.length; i++) {
-        document.getElementById(snake[i]).style.backgroundColor='aliceblue';
-    }*/
     eraseSnake();
     
     //generate new snake
     let a = snake[0];   //copie de la tete du snake
-    snake.pop();        //suppression de la queue
+    if(grow == 0) {
+        snake.pop();
+    }        //suppression de la queue
     switch(sens) {      //insertion de la nouvelle tete + décalage de tout le corps
         case 1:
             if( a <= nbre ) {
@@ -100,11 +96,23 @@ function moveSnake(sens) {
 
     //draw new snake
     drawSnake();
-    /*for (i=0; i<snake.length; i++) {
-        document.getElementById(snake[i]).style.backgroundColor='DarkSeaGreen';
-    }*/
-
     sensValid = sens;
+
+    // check for snake bite
+
+
+    // check if eats apple
+    if(snake[0] == apple) {
+        score += 10 * level;
+        newApple();
+        snakeGrow();
+    }
+
+
+    // check if hits wall
+
+    // maj du score et du level;
+    updateScore();
 }
 
 function drawSnake() {
@@ -124,30 +132,33 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max))+1;
 }
 
+function newApple() {
+    apple = findRandomSpot();
+    drawApple();
+}
+
+function drawApple() {
+    document.getElementById(apple).style.backgroundColor='OrangeRed';
+}
+
+function findRandomSpot() {
+    let spot = 0;
+    let availableSpots = cases.filter(x => !snake.includes(x));
+    let a = getRandomInt(availableSpots.length);
+    spot = availableSpots[a-1];
+    return spot;
+}
+
+function snakeGrow() {
+    // ajoute un élément au snake
+    moveSnake(sensValid, 1);
+    //console.table(snake);
+}
+
 function startGame() {
     setInterval(function(){
-        /*let dice = getRandomInt(3);
-        switch(dice) {
-            case 1:
-                if(sens == 1) {
-                    sens = 4;
-                } else {
-                    sens -= 1;
-                }
-                break;
-            case 2:
-                break;
-            case 3:
-                if(sens == 4) {
-                    sens = 1;
-                } else {
-                    sens += 1;
-                }
-                break;
-        }*/
-        //console.log(sens);
-        moveSnake(sens);
-    }, speed[level]);
+        moveSnake(sens,0);
+    }, speed[level-1]);
 }
 
 
@@ -169,7 +180,7 @@ Sens:
 
 document.addEventListener('keydown', (event) => {
     let touche = event.keyCode;
-    console.log(touche);
+    //console.log(touche);
     switch(touche) {
         case 32:
             if(game == 0) {
@@ -191,9 +202,4 @@ document.addEventListener('keydown', (event) => {
             break;
     }
 });
-
-
-
-// MAIN
-
 
