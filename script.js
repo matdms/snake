@@ -39,8 +39,8 @@ drawSnake();
 drawApple();
 //document.getElementById(apple).style.backgroundColor='OrangeRed';   //
 let game = 0; //jeu stoppé
-let speed = [500, 400, 300, 200, 100, 50]; //fonction du level
-let level = 6;  // on utilise speed[level-1]
+let speed = [500, 400, 300, 200, 100, 50, 30]; //fonction du level
+let level = 5;  // on utilise speed[level-1]
 let score = 0;
 let longueur = snake.length;
 updateScore();
